@@ -110,6 +110,7 @@ var HyperlapsePoint = function(location, pano_id, params ) {
  * @param {Number} [params.millis=50]
  * @param {Number} [params.elevation=0]
  * @param {Number} [params.tilt=0]
+ * @param {Number} [params.pictures=[]]
  */
 var Hyperlapse = function(container, params) {
 
@@ -142,6 +143,7 @@ var Hyperlapse = function(container, params) {
 		_ptime = 0, _dtime = 0,
 		_prev_pano_id = null,
 		_raw_points = [], _h_points = [];
+		_params.pictures = _params.pictures || [];
 
 	/**
 	 * @event Hyperlapse#onError
