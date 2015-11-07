@@ -132,6 +132,7 @@ var Hyperlapse = function(container, params) {
 		_is_playing = false, _is_loading = false,
 		_point_index = 0,
 		_origin_heading = 0, _origin_pitch = 0,
+		_loop = ("undefined" !==  typeof _params.loop) ? _params.loop : true,
 		_forward = true,
 		_lookat_heading = 0, _lookat_elevation = 0,
 		_canvas, _context,
@@ -183,14 +184,17 @@ var Hyperlapse = function(container, params) {
   var isWebGL = function () {
     try {
       return !! window.WebGLRenderingContext
-              && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' );
+              && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' , {preserveDrawingBuffer: true});
     } catch(e) {
       console.log('WebGL not available starting with CanvasRenderer');
       return false;
     }
   };
 
-  _renderer = isWebGL() ? new THREE.WebGLRenderer() : new THREE.CanvasRenderer();
+  _renderer = isWebGL() ? new THREE.WebGLRenderer({
+	  preserveDrawingBuffer: true 
+
+  }) : new THREE.CanvasRenderer();
 	_renderer.autoClearColor = false;
 	_renderer.setSize( _w, _h );
 
@@ -510,6 +514,9 @@ var Hyperlapse = function(container, params) {
 			if(++_point_index == _h_points.length) {
 				_point_index = _h_points.length-1;
 				_forward = !_forward;
+				if(!_loop){
+					self.pause();
+				}
 			}
 		} else {
 			if(--_point_index == -1) {
